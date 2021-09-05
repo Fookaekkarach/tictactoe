@@ -70,9 +70,58 @@
       }
     }
 ```
+* แนวนอนมีการทำงานเหมือนกับแนวตั้ง เพียงแค่เปลี่ยนเป็นวนลูปของแถว
 ``` dart
+    for (int row = 0; row < 5; row++) {
+      if (channelStatus[row][0] != NONE) {
+        if (channelStatus[row][0] != NONE &&
+            channelStatus[row][0] == channelStatus[row][1] &&
+            channelStatus[row][1] == channelStatus[row][2] &&
+            channelStatus[row][2] == channelStatus[row][3]) {
+          return true;
+        }
+      } else {
+        if (channelStatus[row][1] != NONE &&
+            channelStatus[row][1] == channelStatus[row][2] &&
+            channelStatus[row][2] == channelStatus[row][3] &&
+            channelStatus[row][3] == channelStatus[row][4]) {
+          return true;
+        }
+      }
+    }
 ```
+* ต่อมาแนวทะแยง ถ้าเป็น3x3จะมีแค่2กรณี แต่สำหรับ5x5นั้นมี 6 กรณี แบ่งเป็น แนวทะแยงจากซ้ายบนลงขวาล่าง3กรณี และขวาบนลงซ้ายล่างอีก3กรณี 
 ``` dart
+// ตรวจสอบทะแยงซ้ายลงไปขวา ตรงกลาง
+    if (channelStatus[0][0] != NONE) {
+      if (channelStatus[0][0] != NONE &&
+          channelStatus[0][0] == channelStatus[1][1] &&
+          channelStatus[1][1] == channelStatus[2][2] &&
+          channelStatus[2][2] == channelStatus[3][3]) {
+        return true;
+      }
+    } else {
+      if (channelStatus[1][1] != NONE &&
+          channelStatus[1][1] == channelStatus[2][2] &&
+          channelStatus[2][2] == channelStatus[3][3] &&
+          channelStatus[3][3] == channelStatus[4][4]) {
+        return true;
+      }
+    }
+    // ตรวจสอบทะแยงซ้ายลงไปขวา ด้านซ้าย
+    if (channelStatus[1][0] != NONE &&
+        channelStatus[1][0] == channelStatus[2][1] &&
+        channelStatus[2][1] == channelStatus[3][2] &&
+        channelStatus[3][2] == channelStatus[4][3]) {
+      return true;
+    }
+    // ตรวจสอบทะแยงซ้ายลงไปขวา ด้านขวาขวา
+    if (channelStatus[0][1] != NONE &&
+        channelStatus[0][1] == channelStatus[1][2] &&
+        channelStatus[1][2] == channelStatus[2][3] &&
+        channelStatus[2][3] == channelStatus[3][4]) {
+      return true;
+    }
 ```
 ``` dart
 ```
