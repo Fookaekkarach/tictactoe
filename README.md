@@ -6,12 +6,15 @@
 * ในงานนี้ใช้ Flutter Framework และใช้ภาษา Dart ในการพัฒนา
 * Algorithm สำหรับการเช็คการชนะของเกม 3x3 แบ่งเป็น 4 กรณีก็คือ แนวตั้ง แนวนอน แนวทะแยงจากซ้ายบนลงขวาล่าง และแนวทะแยงจากขวาบนลงซ้ายล่าง
   * แนวตั้ง
-  * ```dart
-  * for (int col = 0; col < 3; col++) {
+```js
+function helloword(){
+
+}
+
+```
+  for (int col = 0; col < 3; col++) {
       if (channelStatus[0][col] != NONE &&
           channelStatus[0][col] == channelStatus[1][col] &&
           channelStatus[1][col] == channelStatus[2][col]) {
         return true;
       }
-    }
-  * ```
