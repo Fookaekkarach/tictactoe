@@ -1,2 +1,2 @@
 # Tic Tac Toe
-## วิธีการSetupและRunโปรแกรม 
+## วิธีการ Setup แล ะRun โปรแกรม 
