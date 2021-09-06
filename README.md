@@ -90,9 +90,10 @@
       }
     }
 ```
-* ต่อมาแนวทะแยง ถ้าเป็น3x3จะมีแค่2กรณี แต่สำหรับ5x5นั้นมี 6 กรณี แบ่งเป็น แนวทะแยงจากซ้ายบนลงขวาล่าง3กรณี และขวาบนลงซ้ายล่างอีก3กรณี 
+* ต่อมาแนวทะแยง ถ้าเป็น3x3จะมีแค่2กรณี แต่สำหรับ5x5นั้นมี 6 กรณี แบ่งเป็น แนวทะแยงจากซ้ายบนลงขวาล่าง3กรณี และขวาบนลงซ้ายล่างอีก3กรณี
+* 3กรณีแรก ตรวจสอบทะแยงซ้ายลงไปขวา
 ``` dart
-// ตรวจสอบทะแยงซ้ายลงไปขวา ตรงกลาง
+// ตรวจสอบทะแยงซ้ายลงไปขวา กรณีที่ 1 ตรงกลาง จะเช็ค2รอบ รอบแรกเช็กตัวที่1ถึง4 รอบที่2จะเช็คตัวที่2ถึง5 
     if (channelStatus[0][0] != NONE) {
       if (channelStatus[0][0] != NONE &&
           channelStatus[0][0] == channelStatus[1][1] &&
@@ -108,14 +109,14 @@
         return true;
       }
     }
-    // ตรวจสอบทะแยงซ้ายลงไปขวา ด้านซ้าย
+    // ตรวจสอบทะแยงซ้ายลงไปขวา กรณีที่ 2 ด้านซ้าย จะมีแค่4ช่องให้เช็ค ก็เช็ครอบเดียวเสร็จเลย
     if (channelStatus[1][0] != NONE &&
         channelStatus[1][0] == channelStatus[2][1] &&
         channelStatus[2][1] == channelStatus[3][2] &&
         channelStatus[3][2] == channelStatus[4][3]) {
       return true;
     }
-    // ตรวจสอบทะแยงซ้ายลงไปขวา ด้านขวาขวา
+    // ตรวจสอบทะแยงซ้ายลงไปขวา กรณีที่ 3 ด้านขวา จะมีแค่4ช่องให้เช็ค ก็เช็ครอบเดียวเสร็จเลย
     if (channelStatus[0][1] != NONE &&
         channelStatus[0][1] == channelStatus[1][2] &&
         channelStatus[1][2] == channelStatus[2][3] &&
@@ -123,9 +124,64 @@
       return true;
     }
 ```
+* 3กรณีที่สอง ตรวจสอบทะแยงขวาลงไปซ้าย
 ``` dart
+    // ตรวจสอบทะแยงขวาลงไปซ้าย กรณีที่ 1 ตรงกลาง จะเช็ค2รอบ รอบแรกเช็กตัวที่1ถึง4 รอบที่2จะเช็คตัวที่2ถึง5 
+    if (channelStatus[0][4] != NONE) {
+      if (channelStatus[0][4] != NONE &&
+          channelStatus[0][4] == channelStatus[1][3] &&
+          channelStatus[1][3] == channelStatus[2][2] &&
+          channelStatus[2][2] == channelStatus[3][1]) {
+        return true;
+      }
+    } else {
+      if (channelStatus[1][3] != NONE &&
+          channelStatus[1][3] == channelStatus[2][2] &&
+          channelStatus[2][2] == channelStatus[3][1] &&
+          channelStatus[3][1] == channelStatus[4][0]) {
+        return true;
+      }
+    }
+    // ตรวจสอบทะแยงขวาลงไปซ้าย กรณีที่ 2 ด้านซ้าย จะมีแค่4ช่องให้เช็ค ก็เช็ครอบเดียวเสร็จเลย
+    if (channelStatus[0][3] != NONE &&
+        channelStatus[0][3] == channelStatus[1][2] &&
+        channelStatus[1][2] == channelStatus[2][1] &&
+        channelStatus[2][1] == channelStatus[3][0]) {
+      return true;
+    }
+    // ตรวจสอบทะแยงขวาลงไปซ้าย กรณีที่ 3 ด้านขวา จะมีแค่4ช่องให้เช็ค ก็เช็ครอบเดียวเสร็จเลย
+    if (channelStatus[1][4] != NONE &&
+        channelStatus[1][4] == channelStatus[2][3] &&
+        channelStatus[2][3] == channelStatus[3][2] &&
+        channelStatus[3][2] == channelStatus[4][1]) {
+      return true;
+    }
 ```
+* ส่วนการเช็คเสมอนั้น ของ5x5นั้น ก็เหมือนกับ3x3เลย แค่เพิ่มรอบการทำงานของลูป จะวนลูปเช็คทุกตัว ถ้าทุกตัวนั้นไม่มีค่า NONE(ค่าว่าง)แสดงว่ามีการเสมอ
 ``` dart
+    for (int row = 0; row < 5; row++) {
+      for (int col = 0; col < 5; col++) {
+        if (channelStatus[row][col] == NONE) {
+          return false;
+        }
+      }
+    }
+```
+* ส่วนของ Bot จะใช้วิธีการหาตำแน่งที่ว่างทั้งหมดของตาราง เมื่อได้ตำแหน่งที่ว่างแล้ว เอามาเก็บใน array หรือ List ไว้ เมื่อได้ตำแน่งที่ว่างแล้ว ก็เอาตำแหน่งที่ว่างนั่นไปทำการสุ่ม(Random) เมื่อได้ค่าที่สุ่มแล้วก็เอาไปให้ bot เขียน "O" ลงไปในตาราง ตามตำแหน่งที่สุ่มออกมาได้ 
+``` dart
+        if (args == "bot") {
+            var r = new Random();
+            List a = [];
+            for (int i = 0; i < 3; i++) { //วนลูปหาที่ว่าง
+              for (int j = 0; j < 3; j++) {
+                if (channelStatus[i][j] == NONE) { 
+                  a.add([i, j]); //เก็บตำแหน่งที่ว่าง
+                }
+              }
+            }
+            var element = a[r.nextInt(a.length)]; //สุ่มหาตำแหน่งว่างที่เก็บมา
+            channelStatus[element[0]][element[1]] = 2; //สั่งให้ bot เขียนลงตารางตามตำแหน่งที่สุ่มมาได้
+        }
 ```
 ``` dart
 ```
